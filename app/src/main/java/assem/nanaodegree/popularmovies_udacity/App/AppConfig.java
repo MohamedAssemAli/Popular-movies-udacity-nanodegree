@@ -4,6 +4,7 @@ public class AppConfig {
 
     private final String BASE_URL = "https://api.themoviedb.org/3/movie/";
     private final String API_KEY = "?api_key=0cc111f174b44036a17bca3b027e8832";
+//    private final String API_KEY = "?api_key=0cc111f174b44036a17bca3b027e8832";
     private final String MOVIES_ARRAY = "results";
     private final String POPULAR_TYPE = "popular";
     private final String TOP_RATED_TYPE = "top_rated";
