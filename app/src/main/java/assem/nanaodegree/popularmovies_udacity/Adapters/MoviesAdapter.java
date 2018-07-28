@@ -1,6 +1,8 @@
 package assem.nanaodegree.popularmovies_udacity.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,10 +12,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import assem.nanaodegree.popularmovies_udacity.Activities.DetailsActivity;
+import assem.nanaodegree.popularmovies_udacity.App.AppConfig;
 import assem.nanaodegree.popularmovies_udacity.Models.MovieModel;
 import assem.nanaodegree.popularmovies_udacity.R;
 import butterknife.BindView;
@@ -23,10 +28,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesHold
 
     Context context;
     ArrayList<MovieModel> moviesArrayList;
+    AppConfig appConfig;
 
     public MoviesAdapter(Context context, ArrayList<MovieModel> moviesArrayList) {
         this.context = context;
         this.moviesArrayList = moviesArrayList;
+        appConfig = new AppConfig();
     }
 
     @NonNull
@@ -42,7 +49,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesHold
 
         final MovieModel movieModel = moviesArrayList.get(position);
         Picasso.get()
-                .load("http://image.tmdb.org/t/p/w342/" + movieModel.getPosterPath())
+                .load(appConfig.getIMG_END_POINT() + movieModel.getPosterPath())
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.placeholder)
                 .into(holder.movieImg);
@@ -50,7 +57,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesHold
         holder.movieImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, movieModel.getTitle(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, DetailsActivity.class);
+                String movieObjectAsAString = new Gson().toJson(movieModel);
+                intent.putExtra("movieObj", movieObjectAsAString);
+                context.startActivity(intent);
             }
         });
 

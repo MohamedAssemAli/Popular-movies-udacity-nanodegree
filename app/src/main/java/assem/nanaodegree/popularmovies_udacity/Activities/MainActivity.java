@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity
     // ButterKnife
     @BindView(R.id.parent_layout)
     LinearLayout parentLayout;
+    @BindView(R.id.no_connection_layout)
+    LinearLayout noConnectionLayout;
     @BindView(R.id.progress_layout)
     RelativeLayout progressLayout;
     @BindView(R.id.progress_bar)
@@ -77,7 +79,6 @@ public class MainActivity extends AppCompatActivity
         prefManager = new PrefManager(this);
         moviesArrayList = new ArrayList<>();
         moviesAdapter = new MoviesAdapter(this, moviesArrayList);
-        moviesRecyclerView.setAdapter(moviesAdapter);
         moviesRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         moviesRecyclerView.setAdapter(moviesAdapter);
     }
@@ -123,8 +124,9 @@ public class MainActivity extends AppCompatActivity
                             moviesArrayList.addAll(movies);
                             // refreshing recycler view
                             moviesAdapter.notifyDataSetChanged();
-                            toggleLayout(true);
 
+                            toggleLayout(true);
+                            noConnectionLayout.setVisibility(View.GONE);
                         } catch (JSONException e) {
                             Log.d(TAG, "parseMovies called : catch exception :: " + e.toString());
                         }
@@ -135,6 +137,7 @@ public class MainActivity extends AppCompatActivity
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "parseMovies called : catch onErrorResponse :: " + error.toString());
                 Toast.makeText(MainActivity.this, "Error : " + error.toString(), Toast.LENGTH_LONG).show();
+                noConnectionLayout.setVisibility(View.VISIBLE);
             }
         });
         MyApplication.getInstance(this).addToRequestQueue(request);
@@ -153,8 +156,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void toggleLayout(boolean flag) {
+
         if (flag) {
             moviesRecyclerView.setVisibility(View.VISIBLE);
+            moviesRecyclerView.setAdapter(moviesAdapter);
             progressLayout.setVisibility(View.GONE);
             progressBar.hide();
         } else {
@@ -164,27 +169,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    // Showing the status in Snackbar
-    private void showSnack(boolean isConnected) {
-        String message;
-        int color;
+
+    private void isConnected(boolean isConnected) {
         if (isConnected) {
             parseMovies(prefManager.getParseType());
-            message = "Connected to Internet";
-            color = Color.WHITE;
+            noConnectionLayout.setVisibility(View.GONE);
         } else {
-            toggleLayout(false);
-            message = "Sorry! Not connected to internet";
-            color = Color.RED;
+            noConnectionLayout.setVisibility(View.VISIBLE);
         }
-
-        Snackbar snackbar = Snackbar
-                .make(parentLayout, message, Snackbar.LENGTH_LONG);
-
-        View sbView = snackbar.getView();
-        TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(color);
-        snackbar.show();
     }
 
     /**
@@ -193,6 +185,6 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
-        showSnack(isConnected);
+        isConnected(isConnected);
     }
 }

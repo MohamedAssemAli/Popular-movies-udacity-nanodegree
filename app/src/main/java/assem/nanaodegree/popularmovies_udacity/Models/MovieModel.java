@@ -35,6 +35,9 @@ public class MovieModel {
     @SerializedName("release_date")
     private String releaseDate;
 
+    public MovieModel() {
+    }
+
     public int getVoteCount() {
         return voteCount;
     }
