@@ -1,9 +1,7 @@
 package assem.nanaodegree.popularmovies_udacity.Activities;
 
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -115,7 +112,7 @@ public class MainActivity extends AppCompatActivity
                     public void onResponse(JSONObject response) {
 
                         try {
-                            JSONArray array = response.getJSONArray(appConfig.getMOVIES_ARRAY());
+                            JSONArray array = response.getJSONArray(appConfig.getRESULTS_ARRAY());
                             List<MovieModel> movies =
                                     new Gson().fromJson(array.toString(), new TypeToken<List<MovieModel>>() {
                                     }.getType());
@@ -136,7 +133,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "parseMovies called : catch onErrorResponse :: " + error.toString());
-                Toast.makeText(MainActivity.this, "Error : " + error.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Error : " + error.getMessage(), Toast.LENGTH_LONG).show();
                 noConnectionLayout.setVisibility(View.VISIBLE);
             }
         });
@@ -156,7 +153,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void toggleLayout(boolean flag) {
-
         if (flag) {
             moviesRecyclerView.setVisibility(View.VISIBLE);
             moviesRecyclerView.setAdapter(moviesAdapter);

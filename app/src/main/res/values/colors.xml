@@ -3,7 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="progress_bar_background_gray">#3deef5db</color>
+    <color name="progress_bar_background_gray">#eef5db</color>
     <color name="primary_text">#272727</color>
     <color name="secondary_text">#959595</color>
     <color name="divider">#dcdcdc</color>

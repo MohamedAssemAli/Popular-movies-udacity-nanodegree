@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     tools:context=".Activities.DetailsActivity">
 
+    <!--<FrameLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,7 +53,6 @@
                     android:textStyle="bold"
                     tools:text="Jurassic Park" />
 
-
                 <TextView
                     android:id="@+id/movie_release_date"
                     android:layout_width="match_parent"
@@ -74,10 +75,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_padding_size_medium"
             android:orientation="vertical">
-
 
             <View
                 android:layout_width="match_parent"
@@ -86,7 +86,6 @@
                 android:layout_marginStart="@dimen/margin_padding_size_small"
                 android:background="@color/divider" />
 
-
             <TextView
                 android:id="@+id/movie_overview"
                 android:layout_width="match_parent"
@@ -94,9 +93,50 @@
                 android:layout_margin="@dimen/margin_padding_size_small"
                 android:textSize="@dimen/text_size_medium"
                 tools:text="@string/text_place_holder" />
-
-
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginEnd="@dimen/margin_padding_size_small"
+            android:layout_marginStart="@dimen/margin_padding_size_small"
+            android:background="@color/divider" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_padding_size_small"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            tools:text="@string/movie_trailers" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/trailers_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_padding_size_small" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_padding_size_small"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            tools:text="@string/movie_reviews" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/reviews_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_padding_size_small" />
     </LinearLayout>
 
+    <!--<include-->
+    <!--android:id="@+id/progress_layout"-->
+    <!--layout="@layout/progressbar"-->
+    <!--android:visibility="gone" />-->
+
+    <!--</FrameLayout>-->
 </ScrollView>
