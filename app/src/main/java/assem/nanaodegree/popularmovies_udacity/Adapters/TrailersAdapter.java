@@ -46,7 +46,8 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         final TrailerModel trailerModelObj = trailersArrayList.get(position);
         holder.trailerTitle.setText(trailerModelObj.getName());
         Picasso.get()
-                .load(appConfig.getIMG_END_POINT() + trailerModelObj.getKey())
+                .load(appConfig.getYOUTUBE_THUMBNAIL_PART_ONE() + trailerModelObj.getKey()
+                        + appConfig.getYOUTUBE_THUMBNAIL_PART_TWO())
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.placeholder)
                 .into(holder.trailerImg);

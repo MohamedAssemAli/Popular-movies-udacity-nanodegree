@@ -11,6 +11,9 @@ public class AppConfig {
     private final String VIEDOS = "/videos";
     private final String REVIEWS = "/reviews";
     private final String YOUTUBE_WATCH_URL = "https://www.youtube.com/watch?v=";
+    private final String YOUTUBE_THUMBNAIL_PART_ONE = "https://img.youtube.com/vi/";
+    private final String YOUTUBE_THUMBNAIL_PART_TWO = "/sddefault.jpg";
+
 
     public String getBASE_URL() {
         return BASE_URL;
@@ -46,5 +49,13 @@ public class AppConfig {
 
     public String getYOUTUBE_WATCH_URL() {
         return YOUTUBE_WATCH_URL;
+    }
+
+    public String getYOUTUBE_THUMBNAIL_PART_ONE() {
+        return YOUTUBE_THUMBNAIL_PART_ONE;
+    }
+
+    public String getYOUTUBE_THUMBNAIL_PART_TWO() {
+        return YOUTUBE_THUMBNAIL_PART_TWO;
     }
 }

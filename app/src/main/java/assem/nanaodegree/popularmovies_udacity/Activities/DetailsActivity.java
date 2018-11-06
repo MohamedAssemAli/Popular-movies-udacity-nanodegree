@@ -1,9 +1,10 @@
 package assem.nanaodegree.popularmovies_udacity.Activities;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -67,10 +68,10 @@ public class DetailsActivity extends AppCompatActivity {
     RecyclerView trailersRecycler;
     @BindView(R.id.reviews_recycler)
     RecyclerView reviewsRecycler;
-//    @BindView(R.id.progress_bar)
-//    ContentLoadingProgressBar progressBar;
-//    @BindView(R.id.progress_layout)
-//    RelativeLayout progressLayout;
+    @BindView(R.id.progress_bar)
+    ContentLoadingProgressBar progressBar;
+    @BindView(R.id.progress_layout)
+    RelativeLayout progressLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,15 +92,21 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void init() {
-//        toggleLayout(false);
+        toggleLayout(false);
         populateUI();
+        // reviews module
         reviewsArrayList = new ArrayList<>();
-        trailersArrayList = new ArrayList<>();
         reviewsAdapter = new ReviewsAdapter(this, reviewsArrayList);
         reviewsRecycler.setAdapter(reviewsAdapter);
+        reviewsRecycler.setLayoutManager(new LinearLayoutManager(this));
+        reviewsRecycler.setNestedScrollingEnabled(false);
+        getReviews(movieId);
+        // trailers module
+        trailersArrayList = new ArrayList<>();
         trailersAdapter = new TrailersAdapter(this, trailersArrayList);
         trailersRecycler.setAdapter(trailersAdapter);
-        getReviews(movieId);
+        trailersRecycler.setLayoutManager(new LinearLayoutManager(this));
+        trailersRecycler.setNestedScrollingEnabled(false);
         getTrailers(movieId);
     }
 
@@ -138,9 +145,10 @@ public class DetailsActivity extends AppCompatActivity {
                             // adding trailer to list
                             trailersArrayList.clear();
                             trailersArrayList.addAll(trailer);
+
                             // refreshing recycler view
                             trailersAdapter.notifyDataSetChanged();
-//                            toggleLayout(true);
+                            toggleLayout(true);
 //                            noConnectionLayout.setVisibility(View.GONE);
                         } catch (JSONException e) {
                             Log.d(TAG, "parseMovies called : catch exception :: " + e.toString());
@@ -177,7 +185,7 @@ public class DetailsActivity extends AppCompatActivity {
                             // refreshing recycler view
                             reviewsAdapter.notifyDataSetChanged();
 
-//                            toggleLayout(true);
+                            toggleLayout(true);
 //                            noConnectionLayout.setVisibility(View.GONE);
                         } catch (JSONException e) {
                             Log.d(TAG, "parseMovies called : catch exception :: " + e.toString());
@@ -200,16 +208,18 @@ public class DetailsActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-//    private void toggleLayout(boolean flag) {
-//        if (flag) {
-////            elementaryLevelRecyclerView.setVisibility(View.VISIBLE);
-//            progressLayout.setVisibility(View.GONE);
-//            progressBar.hide();
-//        } else {
-//            progressLayout.setVisibility(View.VISIBLE);
-//            progressBar.show();
-////            elementaryLevelRecyclerView.setVisibility(View.GONE);
-//        }
-//    }
+    private void toggleLayout(boolean flag) {
+        if (flag) {
+            reviewsRecycler.setVisibility(View.VISIBLE);
+            trailersRecycler.setVisibility(View.VISIBLE);
+            progressLayout.setVisibility(View.GONE);
+            progressBar.hide();
+        } else {
+            progressLayout.setVisibility(View.VISIBLE);
+            progressBar.show();
+            reviewsRecycler.setVisibility(View.GONE);
+            trailersRecycler.setVisibility(View.GONE);
+        }
+    }
 
 }
