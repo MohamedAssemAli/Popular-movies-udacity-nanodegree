@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import assem.nanaodegree.popularmovies_udacity.Models.MovieModel;
 
@@ -30,6 +31,15 @@ public class MovieRepository {
 
     public void delete(MovieModel movieModel) {
         new deleteAsyncTask(mMovieDao).execute(movieModel);
+    }
+
+    public MovieModel selectMovieById(int id) {
+        try {
+            return new selectAsyncTask(mMovieDao).execute(id).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static class insertAsyncTask extends AsyncTask<MovieModel, Void, Void> {
@@ -61,19 +71,18 @@ public class MovieRepository {
             return null;
         }
     }
-//
-//    private static class selectAsyncTask extends AsyncTask<MovieModel, Integer, Void> {
-//
-//        private MovieDao mAsyncTaskDao;
-//
-//        selectAsyncTask(MovieDao dao) {
-//            mAsyncTaskDao = dao;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(final MovieModel... params) {
-//            mAsyncTaskDao.selectMovieById(params[1]);
-//            return null;
-//        }
-//    }
+
+    private static class selectAsyncTask extends AsyncTask<Integer, Void, MovieModel> {
+
+        private MovieDao mAsyncTaskDao;
+
+        selectAsyncTask(MovieDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected MovieModel doInBackground(final Integer... params) {
+            return mAsyncTaskDao.selectMovieById(params[0]);
+        }
+    }
 }

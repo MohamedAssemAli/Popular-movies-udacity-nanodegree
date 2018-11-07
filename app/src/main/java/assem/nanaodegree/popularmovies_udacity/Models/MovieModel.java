@@ -24,6 +24,7 @@ public class MovieModel {
     @ColumnInfo(name = "vote_average")
     @SerializedName("vote_average")
     private double voteAverage;
+    @Ignore
     @SerializedName("title")
     private String title;
     @SerializedName("popularity")
@@ -34,7 +35,7 @@ public class MovieModel {
     @Ignore
     @SerializedName("original_language")
     private String originalLanguage;
-    @Ignore
+    @ColumnInfo(name = "original_title")
     @SerializedName("original_title")
     private String originalTitle;
     @Ignore

@@ -31,4 +31,8 @@ public class MovieViewModel extends AndroidViewModel {
     public void delete(MovieModel movieModel) {
         mRepository.delete(movieModel);
     }
+
+    public MovieModel selectMovieById(int id) {
+        return mRepository.selectMovieById(id);
+    }
 }
