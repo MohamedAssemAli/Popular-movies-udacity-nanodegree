@@ -8,5 +8,6 @@
 
     <!-- Error messages-->
     <string name="detail_error_message">Movie data not available</string>
+    <string name="fav">Favorite</string>
 
 </resources>

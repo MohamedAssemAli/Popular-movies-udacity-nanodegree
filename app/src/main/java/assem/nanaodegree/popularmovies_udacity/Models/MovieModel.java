@@ -1,37 +1,55 @@
 package assem.nanaodegree.popularmovies_udacity.Models;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity(tableName = "movie")
 public class MovieModel {
 
+    @Ignore
     @SerializedName("vote_count")
     private int voteCount;
+    @PrimaryKey
     @SerializedName("id")
     private int id;
+    @Ignore
     @SerializedName("video")
     private boolean video;
+    @ColumnInfo(name = "vote_average")
     @SerializedName("vote_average")
     private double voteAverage;
     @SerializedName("title")
     private String title;
     @SerializedName("popularity")
     private double popularity;
+    @ColumnInfo(name = "poster_path")
     @SerializedName("poster_path")
     private String posterPath;
+    @Ignore
     @SerializedName("original_language")
     private String originalLanguage;
+    @Ignore
     @SerializedName("original_title")
     private String originalTitle;
+    @Ignore
     @SerializedName("genre_ids")
     private List<Integer> genreIds = null;
+    @ColumnInfo(name = "backdrop_path")
     @SerializedName("backdrop_path")
     private String backdropPath;
+    @Ignore
     @SerializedName("adult")
     private boolean adult;
+    @ColumnInfo(name = "overview")
     @SerializedName("overview")
     private String overview;
+    @ColumnInfo(name = "release_date")
     @SerializedName("release_date")
     private String releaseDate;
 

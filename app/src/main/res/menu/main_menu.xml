@@ -4,8 +4,10 @@
     <item
         android:id="@+id/menu_popular"
         android:title="@string/popular" />
-
     <item
         android:id="@+id/menu_top_rated"
         android:title="@string/top_rated" />
+    <item
+        android:id="@+id/menu_fav"
+        android:title="@string/fav" />
 </menu>
