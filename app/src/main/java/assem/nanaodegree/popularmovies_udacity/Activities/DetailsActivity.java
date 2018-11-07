@@ -76,8 +76,12 @@ public class DetailsActivity extends AppCompatActivity {
     TextView movieOverview;
     @BindView(R.id.trailers_recycler)
     RecyclerView trailersRecycler;
+    @BindView(R.id.empty_trailers_recycler_placeholder)
+    TextView emptyTrailersRecyclerPlaceholder;
     @BindView(R.id.reviews_recycler)
     RecyclerView reviewsRecycler;
+    @BindView(R.id.empty_reviews_recycler_placeholder)
+    TextView emptyReviewsRecyclerPlaceholder;
     @BindView(R.id.progress_bar)
     ContentLoadingProgressBar progressBar;
     @BindView(R.id.progress_layout)
@@ -176,6 +180,8 @@ public class DetailsActivity extends AppCompatActivity {
                             // refreshing recycler view
                             trailersAdapter.notifyDataSetChanged();
                             toggleLayout(true);
+                            if (trailersArrayList.isEmpty())
+                                emptyTrailersRecyclerPlaceholder.setVisibility(View.VISIBLE);
 //                            noConnectionLayout.setVisibility(View.GONE);
                         } catch (JSONException e) {
                             Log.d(TAG, "parseMovies called : catch exception :: " + e.toString());
@@ -211,8 +217,9 @@ public class DetailsActivity extends AppCompatActivity {
                             reviewsArrayList.addAll(review);
                             // refreshing recycler view
                             reviewsAdapter.notifyDataSetChanged();
-
                             toggleLayout(true);
+                            if (reviewsArrayList.isEmpty())
+                                emptyReviewsRecyclerPlaceholder.setVisibility(View.VISIBLE);
 //                            noConnectionLayout.setVisibility(View.GONE);
                         } catch (JSONException e) {
                             Log.d(TAG, "parseMovies called : catch exception :: " + e.toString());

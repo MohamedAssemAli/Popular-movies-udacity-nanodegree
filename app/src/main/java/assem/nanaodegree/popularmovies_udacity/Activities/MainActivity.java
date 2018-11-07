@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity
     ContentLoadingProgressBar progressBar;
     @BindView(R.id.movies_recycler)
     RecyclerView moviesRecyclerView;
+    @BindView(R.id.empty_movies_recycler_placeholder)
+    TextView emptyRecyclerPlaceholder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,8 +125,23 @@ public class MainActivity extends AppCompatActivity
                 moviesArrayList.clear();
                 moviesArrayList.addAll(movieModels);
                 moviesAdapter.notifyDataSetChanged();
+                if (moviesArrayList.isEmpty())
+                    toggleOfflineMovies(false);
+                else
+                    toggleOfflineMovies(true);
             }
         });
+    }
+
+    private void toggleOfflineMovies(boolean flag) {
+        if (flag) {
+            emptyRecyclerPlaceholder.setVisibility(View.GONE);
+            moviesRecyclerView.setVisibility(View.VISIBLE);
+
+        } else {
+            emptyRecyclerPlaceholder.setVisibility(View.VISIBLE);
+            moviesRecyclerView.setVisibility(View.GONE);
+        }
     }
 
     private void parseMovies(String type) {
@@ -137,15 +155,13 @@ public class MainActivity extends AppCompatActivity
 
                         try {
                             JSONArray array = response.getJSONArray(appConfig.getRESULTS_ARRAY());
-                            List<MovieModel> movies =
-                                    new Gson().fromJson(array.toString(), new TypeToken<List<MovieModel>>() {
-                                    }.getType());
+                            List<MovieModel> movies = new Gson().fromJson(array.toString(), new TypeToken<List<MovieModel>>() {
+                            }.getType());
                             // adding movies to list
                             moviesArrayList.clear();
                             moviesArrayList.addAll(movies);
                             // refreshing recycler view
                             moviesAdapter.notifyDataSetChanged();
-
                             toggleLayout(true);
                             noConnectionLayout.setVisibility(View.GONE);
                         } catch (JSONException e) {

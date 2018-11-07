@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
@@ -18,8 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/progress_bar_background_gray"
-        android:elevation="2dp"
-        android:visibility="visible">
+        android:elevation="2dp">
 
         <android.support.v4.widget.ContentLoadingProgressBar
             android:id="@+id/progress_bar"
@@ -35,4 +33,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:id="@+id/empty_movies_recycler_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_fav"
+        android:textColor="@color/secondary_text"
+        android:textSize="@dimen/text_size_small"
+        android:visibility="gone" />
 </LinearLayout>
