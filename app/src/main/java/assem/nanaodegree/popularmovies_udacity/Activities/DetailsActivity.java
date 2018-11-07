@@ -116,6 +116,9 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void init() {
         toggleLayout(false);
+        // archComponents module
+        mMovieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
+        // update UI
         populateUI();
         checkFav();
         // reviews module
@@ -132,8 +135,6 @@ public class DetailsActivity extends AppCompatActivity {
         trailersRecycler.setLayoutManager(new LinearLayoutManager(this));
         trailersRecycler.setNestedScrollingEnabled(false);
         getTrailers(movieId);
-        // archComponents module
-        mMovieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
     }
 
     @SuppressLint("SetTextI18n")
@@ -235,11 +236,10 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void checkFav() {
-        if (MovieRoomDatabase.getDatabase(this).movieDao().selectMovieById(movieModel.getId()) != null) {
+        if (mMovieViewModel.selectMovieById(movieModel.getId()) != null)
             toggleFav(true);
-        } else {
+        else
             toggleFav(false);
-        }
     }
 
     private void toggleFav(boolean flag) {
