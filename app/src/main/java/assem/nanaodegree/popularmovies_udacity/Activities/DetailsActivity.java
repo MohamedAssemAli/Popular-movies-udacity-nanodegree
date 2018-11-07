@@ -1,6 +1,7 @@
 package assem.nanaodegree.popularmovies_udacity.Activities;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,9 @@ import java.util.Objects;
 
 import assem.nanaodegree.popularmovies_udacity.Adapters.ReviewsAdapter;
 import assem.nanaodegree.popularmovies_udacity.Adapters.TrailersAdapter;
+import assem.nanaodegree.popularmovies_udacity.AndroidArchComponents.MovieDao;
+import assem.nanaodegree.popularmovies_udacity.AndroidArchComponents.MovieRoomDatabase;
+import assem.nanaodegree.popularmovies_udacity.AndroidArchComponents.MovieViewModel;
 import assem.nanaodegree.popularmovies_udacity.App.AppConfig;
 import assem.nanaodegree.popularmovies_udacity.App.MyApplication;
 import assem.nanaodegree.popularmovies_udacity.Models.MovieModel;
@@ -39,6 +43,7 @@ import assem.nanaodegree.popularmovies_udacity.Models.TrailerModel;
 import assem.nanaodegree.popularmovies_udacity.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DetailsActivity extends AppCompatActivity {
     // TAG for debugging
@@ -50,6 +55,7 @@ public class DetailsActivity extends AppCompatActivity {
     private ArrayList<ReviewModel> reviewsArrayList;
     private TrailersAdapter trailersAdapter;
     private ReviewsAdapter reviewsAdapter;
+    private MovieViewModel mMovieViewModel;
     String movieId;
     // ButterKnife
     @BindView(R.id.movie_cover)
@@ -62,6 +68,10 @@ public class DetailsActivity extends AppCompatActivity {
     TextView movieReleaseDate;
     @BindView(R.id.movie_average_rating)
     TextView movieRating;
+    @BindView(R.id.movie_is_fav)
+    ImageView movieIsFav;
+    @BindView(R.id.movie_not_fav)
+    ImageView movieNotFav;
     @BindView(R.id.movie_overview)
     TextView movieOverview;
     @BindView(R.id.trailers_recycler)
@@ -72,6 +82,19 @@ public class DetailsActivity extends AppCompatActivity {
     ContentLoadingProgressBar progressBar;
     @BindView(R.id.progress_layout)
     RelativeLayout progressLayout;
+
+    // onClicks
+    @OnClick(R.id.movie_is_fav)
+    void removeMovieFromDB() {
+        toggleFav(false);
+        mMovieViewModel.delete(movieModel);
+    }
+
+    @OnClick(R.id.movie_not_fav)
+    void addMovieToDB() {
+        toggleFav(true);
+        mMovieViewModel.insert(movieModel);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +117,7 @@ public class DetailsActivity extends AppCompatActivity {
     private void init() {
         toggleLayout(false);
         populateUI();
+        checkFav();
         // reviews module
         reviewsArrayList = new ArrayList<>();
         reviewsAdapter = new ReviewsAdapter(this, reviewsArrayList);
@@ -108,6 +132,8 @@ public class DetailsActivity extends AppCompatActivity {
         trailersRecycler.setLayoutManager(new LinearLayoutManager(this));
         trailersRecycler.setNestedScrollingEnabled(false);
         getTrailers(movieId);
+        // archComponents module
+        mMovieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
     }
 
     @SuppressLint("SetTextI18n")
@@ -131,7 +157,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void getTrailers(String movieId) {
-        String url = appConfig.getBASE_URL() + movieId + appConfig.getVIEDOS() + appConfig.getAPI_KEY();
+        String url = appConfig.getBASE_URL() + movieId + appConfig.getVIDEOS() + appConfig.getAPI_KEY();
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
                 url, null,
                 new Response.Listener<JSONObject>() {
@@ -206,6 +232,24 @@ public class DetailsActivity extends AppCompatActivity {
     private void closeOnError() {
         finish();
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void checkFav() {
+        if (MovieRoomDatabase.getDatabase(this).movieDao().selectMovieById(movieModel.getId()) != null) {
+            toggleFav(true);
+        } else {
+            toggleFav(false);
+        }
+    }
+
+    private void toggleFav(boolean flag) {
+        if (flag) {
+            movieIsFav.setVisibility(View.VISIBLE);
+            movieNotFav.setVisibility(View.GONE);
+        } else {
+            movieIsFav.setVisibility(View.GONE);
+            movieNotFav.setVisibility(View.VISIBLE);
+        }
     }
 
     private void toggleLayout(boolean flag) {

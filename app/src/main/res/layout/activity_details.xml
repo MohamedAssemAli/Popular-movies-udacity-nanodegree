@@ -71,6 +71,26 @@
                         android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_small"
                         tools:text="Rating: 8/10" />
+
+                    <ImageView
+                        android:id="@+id/movie_is_fav"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="start"
+                        android:layout_marginTop="@dimen/margin_padding_size_medium"
+                        android:src="@drawable/ic_favorite_red_800_24dp"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:id="@+id/movie_not_fav"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="start"
+                        android:layout_marginTop="@dimen/margin_padding_size_medium"
+                        android:src="@drawable/ic_favorite_border_grey_500_24dp"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
                 </LinearLayout>
             </LinearLayout>
 

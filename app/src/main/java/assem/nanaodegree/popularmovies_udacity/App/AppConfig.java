@@ -8,7 +8,8 @@ public class AppConfig {
     private final String RESULTS_ARRAY = "results";
     private final String POPULAR_TYPE = "popular";
     private final String TOP_RATED_TYPE = "top_rated";
-    private final String VIEDOS = "/videos";
+    private final String FAV_TYPE = "fav";
+    private final String VIDEOS = "/videos";
     private final String REVIEWS = "/reviews";
     private final String YOUTUBE_WATCH_URL = "https://www.youtube.com/watch?v=";
     private final String YOUTUBE_THUMBNAIL_PART_ONE = "https://img.youtube.com/vi/";
@@ -39,8 +40,12 @@ public class AppConfig {
         return TOP_RATED_TYPE;
     }
 
-    public String getVIEDOS() {
-        return VIEDOS;
+    public String getFAV_TYPE() {
+        return FAV_TYPE;
+    }
+
+    public String getVIDEOS() {
+        return VIDEOS;
     }
 
     public String getREVIEWS() {

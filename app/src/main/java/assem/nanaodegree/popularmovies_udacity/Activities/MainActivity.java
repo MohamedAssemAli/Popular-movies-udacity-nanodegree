@@ -1,7 +1,10 @@
 package assem.nanaodegree.popularmovies_udacity.Activities;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import assem.nanaodegree.popularmovies_udacity.AndroidArchComponents.MovieViewModel;
 import assem.nanaodegree.popularmovies_udacity.Helper.PrefManager;
 import assem.nanaodegree.popularmovies_udacity.Adapters.MoviesAdapter;
 import assem.nanaodegree.popularmovies_udacity.App.AppConfig;
@@ -47,10 +51,11 @@ public class MainActivity extends AppCompatActivity
     // TAG for debugging
     private final String TAG = MainActivity.class.getSimpleName();
     // Vars
-    AppConfig appConfig;
-    PrefManager prefManager;
-    MoviesAdapter moviesAdapter;
-    ArrayList<MovieModel> moviesArrayList;
+    private AppConfig appConfig;
+    private PrefManager prefManager;
+    private MoviesAdapter moviesAdapter;
+    private ArrayList<MovieModel> moviesArrayList;
+    private MovieViewModel mMovieViewModel;
     // ButterKnife
     @BindView(R.id.parent_layout)
     LinearLayout parentLayout;
@@ -76,8 +81,11 @@ public class MainActivity extends AppCompatActivity
         prefManager = new PrefManager(this);
         moviesArrayList = new ArrayList<>();
         moviesAdapter = new MoviesAdapter(this, moviesArrayList);
+        moviesRecyclerView.setAdapter(moviesAdapter);
         moviesRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         moviesRecyclerView.setAdapter(moviesAdapter);
+        // archComponents module
+        mMovieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
     }
 
     @Override
@@ -98,8 +106,24 @@ public class MainActivity extends AppCompatActivity
                 prefManager.setType(appConfig.getTOP_RATED_TYPE());
                 parseMovies(prefManager.getParseType());
                 return true;
+            case R.id.menu_fav:
+                prefManager.setType(appConfig.getFAV_TYPE());
+                getOfflineMovies();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getOfflineMovies() {
+        toggleLayout(true);
+        mMovieViewModel.getAllMovies().observe(this, new Observer<List<MovieModel>>() {
+            @Override
+            public void onChanged(@Nullable List<MovieModel> movieModels) {
+                moviesArrayList.clear();
+                moviesArrayList.addAll(movieModels);
+                moviesAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void parseMovies(String type) {
@@ -143,7 +167,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         ConnectivityReceiver connectivityReceiver = new ConnectivityReceiver(this);
@@ -155,7 +178,6 @@ public class MainActivity extends AppCompatActivity
     private void toggleLayout(boolean flag) {
         if (flag) {
             moviesRecyclerView.setVisibility(View.VISIBLE);
-            moviesRecyclerView.setAdapter(moviesAdapter);
             progressLayout.setVisibility(View.GONE);
             progressBar.hide();
         } else {
@@ -165,12 +187,16 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
     private void isConnected(boolean isConnected) {
         if (isConnected) {
-            parseMovies(prefManager.getParseType());
+            if (prefManager.getParseType().equals(appConfig.getFAV_TYPE()))
+                getOfflineMovies();
+            else
+                parseMovies(prefManager.getParseType());
             noConnectionLayout.setVisibility(View.GONE);
         } else {
+//            Toast.makeText(this, "No network, showing offline movies", Toast.LENGTH_LONG).show();
+//            getOfflineMovies();
             noConnectionLayout.setVisibility(View.VISIBLE);
         }
     }
